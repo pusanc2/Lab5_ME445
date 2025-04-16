@@ -20,11 +20,13 @@ go_away = [270*PI/180.0, -90*PI/180.0, 90*PI/180.0, -90*PI/180.0, -90*PI/180.0, 
 xw_yw_G = []
 xw_yw_Y = []
 
-xw_yw_G_end1 = [0.3, 0.3, 0.02]
-xw_yw_Y_end1 = [0.3, 0.35, 0.02]
+# xw_yw_G_end1 = [0.3, 0.3, 0.02]
+# xw_yw_Y_end1 = [0.3, 0.35, 0.02]
 
-xw_yw_G_end2 = [0.35, 0.3, 0.02]
-xw_yw_Y_end2 = [0.35, 0.35, 0.02]
+# xw_yw_G_end2 = [0.35, 0.3, 0.02]
+# xw_yw_Y_end2 = [0.35, 0.35, 0.02]
+
+Dest = [[0.20, 0.25], [0.20, 0.30],[0.15, 0.25],[0.15, 0.30]]
 # Any other global variable you want to define
 # Hints: where to put the blocks?
 
@@ -202,7 +204,25 @@ def move_block(pub_cmd, loop_rate, start_xw_yw_zw, target_xw_yw_zw, vel, accel):
 
     # global variable1
     # global variable2
+    Dest_f = lab_invk(Dest[0], Dest[1], 0.03, 0)
+    # print(f"Dest_f = {Dest_f}")
 
+    move_arm(pub_cmd, loop_rate, new_dest, vel, accel)
+
+    gripper(pub_cmd, loop_rate, suction_on)
+    time.sleep(1.0)
+    if 1.2 < analog_in_0 < 2:
+        gripper(pub_cmd, loop_rate, suction_off)
+        move_arm(pub_cmd,loop_rate,go_away,4.0, 4.0)
+        error = -2
+        rospy.loginfo("Block not found Exiting")
+        sys.exit()
+    # Delay to make sure suction cup has grasped the block
+    move_arm(pub_cmd, loop_rate, go_away,4.0, 4.0)
+    move_arm(pub_cmd, loop_rate, Dest_f,4.0, 4.0)
+    gripper(pub_cmd, loop_rate, suction_off)
+    move_arm(pub_cmd, loop_rate, go_away,4.0, 4.0)
+    
     error = 0
 
     # ========================= Student's code ends here ===========================
@@ -294,13 +314,39 @@ def main():
     ic = ImageConverter(SPIN_RATE)
     time.sleep(5)
 
+    detected_green = []
+    detected_yellow = []
     # ========================= Student's code starts here =========================
 
     """
     Hints: use the found xw_yw_G, xw_yw_Y to move the blocks correspondingly. You will
     need to call move_block(pub_command, loop_rate, start_xw_yw_zw, target_xw_yw_zw, vel, accel)
     """
-
+    while len(detected_green) == 0:  # Keep checking until blocks are found
+        print(f"xw_yw_G = {xw_yw_G}")
+        if len(xw_yw_G) == 2:
+            detected_green = xw_yw_G.copy()
+            print(f"detected_green = {detected_green}")
+            #print(f"detected_green = {detected_green}")
+            #print(f"detected_green[0][0] = {detected_green[0][0]}")
+            new_dest1 = lab_invk(detected_green[0][0], detected_green[0][1], 0.03, 0)
+            new_dest2 = lab_invk(detected_green[1][0], detected_green[1][1], 0.03, 0)
+            move_block(pub_command, loop_rate, new_dest1, Dest[0], vel, accel)
+            move_block(pub_command, loop_rate, new_dest2, Dest[1], vel, accel)
+        rospy.sleep(0.5)  # Add small delay between checks
+        print("Searching for green blocks...")
+    
+    while len(detected_yellow) == 0:  # Keep checking until blocks are found
+        if len(xw_yw_Y) == 2:
+            detected_yellow = xw_yw_Y.copy()
+            print(f"detected_yellow = {detected_yellow}")
+            new_dest1 = lab_invk(detected_yellow[0][0], detected_yellow[0][1], 0.025, 0)
+            new_dest2 = lab_invk(detected_yellow[1][0], detected_yellow[1][1], 0.025, 0)
+            move_block(pub_command, loop_rate, new_dest1, Dest[2], vel, accel)
+            move_block(pub_command, loop_rate, new_dest2, Dest[3], vel, accel)
+        rospy.sleep(0.5)  # Add small delay between checks
+        print("Searching for yellow blocks...")
+    
 
 
     # ========================= Student's code ends here ===========================
