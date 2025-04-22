@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import numpy as np
-from scipy.linalg import expm
-from lab4_header import *
+from scipy.linalg import expm, logm
+from lab5_header import *
 
 """
 Use 'expm' for matrix exponential.
@@ -179,6 +179,9 @@ def lab_invk(xWgrip, yWgrip, zWgrip, yaw_WgripDegree):
 	# theta 5 always -90 degrees
 	theta5 = -np.pi / 2
  
-	print("theta1: ", theta1 * 180 / np.pi, "\ntheta2: ", theta2 * 180 / np.pi, "\ntheta3: ", theta3 * 180 / np.pi, "\ntheta4: ", theta4 * 180 / np.pi, "\ntheta5: ", theta5 * 180 / np.pi, "\ntheta6: ", theta6 * 180 / np.pi)
+	print("theta1: ", theta1 * 180 / np.pi, "\ntheta2: ", 
+       theta2 * 180 / np.pi, "\ntheta3: ", theta3 * 180 / np.pi, 
+       "\ntheta4: ", theta4 * 180 / np.pi, "\ntheta5: ", theta5 * 180 / np.pi, 
+       "\ntheta6: ", theta6 * 180 / np.pi)
 	# ==============================================================#
 	return lab_fk(theta1, theta2, theta3, theta4, theta5, theta6)
