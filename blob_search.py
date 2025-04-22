@@ -8,7 +8,7 @@ import numpy as np
 # Params for camera calibration
 theta = 0
 beta = 760.0
-tx = 0.20
+tx = 0.22
 ty = 0.07
 
 # Function that converts image coord to world coord
@@ -19,10 +19,11 @@ def IMG2W(col, row):
     y_c = (col - o_c) / beta
     x_c2 = x_c + tx
     y_c2 = y_c + ty
-    x_w = x_c2 * np.cos(theta) - y_c2 * np.sin(theta)
-    y_w = x_c2 * np.sin(theta) + y_c2 * np.cos(theta)
+    x_w = (x_c2 * np.cos(theta) - y_c2 * np.sin(theta))
+    y_w = (x_c2 * np.sin(theta) + y_c2 * np.cos(theta))-0.02
     
     return (x_w, y_w)
+
 
 # ========================= Student's code ends here ===========================
 
@@ -34,17 +35,17 @@ def blob_search(image_raw, color):
     # ========================= Student's code starts here =========================
 
     # Filter by Color
-    params.filterByColor = False
+    params.filterByColor = True
     params.blobColor = 255
 
     # Filter by Area.
     params.filterByArea = True
-    # params.minArea = 300
-    params.minArea = 150
-    params.maxArea = 2000
+    params.minArea = 300
+    # params.minArea = 150
+    # params.maxArea = 2000
 
     # Filter by Circularity
-    params.filterByCircularity = False
+    params.filterByCircularity = True
     params.minCircularity = 0.2
 
     # Filter by Inerita
@@ -53,8 +54,8 @@ def blob_search(image_raw, color):
     params.maxInertiaRatio = 1.0
     
     # Filter by Convexity
-    params.filterByConvexity = True
-    params.minConvexity = 0.75
+    params.filterByConvexity = False
+    params.minConvexity = 0.8
 
     # ========================= Student's code ends here ===========================
 
@@ -87,8 +88,8 @@ def blob_search(image_raw, color):
     # else:
     #     raise ValueError("Unsupported color passed")
     if (color == "green"):
-        lower = (40,50,50)   # green lower
-        upper = (85,255,255)   # green upper
+        lower = (50,110,100)   # green lower
+        upper = (70,220,200)   # green upper
     # elif (color == "blue"):    
     #     lower = (0,0,50)     # yellow lower
     #     upper = (130,255,180)   # yellow upper
