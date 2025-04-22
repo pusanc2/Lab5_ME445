@@ -15,12 +15,14 @@ ty = 0.07
 def IMG2W(col, row):
     o_r = 240
     o_c = 320
+    
     x_c = (row - o_r) / beta
     y_c = (col - o_c) / beta
-    x_c2 = x_c + tx
-    y_c2 = y_c + ty
-    x_w = (x_c2 * np.cos(theta) - y_c2 * np.sin(theta))
-    y_w = (x_c2 * np.sin(theta) + y_c2 * np.cos(theta))-0.02
+    
+    x_c_2 = x_c + tx
+    y_c_2 = y_c + ty
+    x_w = (x_c_2 * np.cos(theta) - y_c_2 * np.sin(theta))
+    y_w = (x_c_2 * np.sin(theta) + y_c_2 * np.cos(theta))-0.02
     
     return (x_w, y_w)
 
@@ -67,33 +69,11 @@ def blob_search(image_raw, color):
 
     # ========================= Student's code starts here =========================
 
-    # lower = (110,50,50)     # blue lower
-    # upper = (130,255,255)   # blue upper
-    # if color == "orange":
-    #     lower = (5, 100, 100)
-    #     upper = (20, 255, 255)
-    # # elif color == "green":
-    # #     lower = (50, 125, 100)
-    # #     upper = (70, 240, 200)
-    # elif color == "green":
-    #     lower = (40, 40, 40)
-    #     upper = (80, 255, 255)
-    # elif color == "yellow":
-    #     lower = (20, 80, 80)
-    #     upper = (35, 255, 255)
-    # elif (color == "blue"):    
-    #     lower = (0,0,50)     # yellow lower
-    #     upper = (130,255,180)   # yellow upper
-    
-    # else:
-    #     raise ValueError("Unsupported color passed")
     if (color == "green"):
         lower = (50,110,100)   # green lower
         upper = (70,220,200)   # green upper
-    # elif (color == "blue"):    
-    #     lower = (0,0,50)     # yellow lower
-    #     upper = (130,255,180)   # yellow upper
-    elif color == "yellow":
+        
+    elif (color == "yellow"):
         lower = (10, 100, 100)
         upper = (35, 255, 255)    
     else:
